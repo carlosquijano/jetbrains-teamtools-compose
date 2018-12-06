@@ -1,0 +1,33 @@
+version: '3.3'
+services:
+  hub:
+    image: jetbrains/hub:2018.3.11014
+    volumes:
+      - hub_data_vol:/opt/hub/data
+      - hub_logs_vol:/opt/hub/logs
+      - hub_backups_vol:/opt/hub/backups
+    restart: always
+    ports:
+      - "9081:8080"
+  youtrack:
+    image: jetbrains/youtrack:2018.3.47247
+    depends_on:
+      - hub
+    links: 
+      - hub
+    volumes:
+      - youtrack_data_vol:/opt/youtrack/data
+      - youtrack_conf_vol:/opt/youtrack/conf
+      - youtrack_logs_vol:/opt/youtrack/logs
+      - youtrack_backups_vol:/opt/youtrack/backups
+    restart: always
+    ports:
+      - "9082:8080"
+volumes:
+  hub_data_vol:
+  hub_logs_vol:
+  hub_backups_vol:
+  youtrack_data_vol:
+  youtrack_conf_vol:
+  youtrack_logs_vol:
+  youtrack_backups_vol:
