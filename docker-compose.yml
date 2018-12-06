@@ -1,6 +1,6 @@
 version: '3.3'
 services:
-    # The reverse proxy service (Traefik)
+  # The reverse proxy service (Traefik)
   proxy:
     image: traefik  # The official Traefik docker image
     command: --web --docker --docker.domain=acme.local # Enables the web UI and tells Traefik to listen to docker
@@ -10,6 +10,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock  # So that Traefik can listen to the Docker events
     restart: always
+  # Identity Provider (JetBrains Hub)
   hub:
     image: jetbrains/hub:2018.3.11014
     volumes:
@@ -21,7 +22,9 @@ services:
       - "9081:8080"
     labels:
       - "traefik.port=8080"
-      - "traefik.frontend.rule=Host:hub.acme.local"    
+      - "traefik.backend=hub"
+      - "traefik.frontend.rule=Host:hub.acme.local"
+  # Issue Management Service (JetBrains YouTrack)
   youtrack:
     image: jetbrains/youtrack:2018.3.47247
     depends_on:
@@ -38,11 +41,14 @@ services:
       - "9082:8080"
     labels:
       - "traefik.port=8080"
+      - "traefik.backend=youtrack"
       - "traefik.frontend.rule=Host:youtrack.acme.local"
 volumes:
+  # HUB volumes
   hub_data_vol:
   hub_logs_vol:
   hub_backups_vol:
+  # YouTrack volumes
   youtrack_data_vol:
   youtrack_conf_vol:
   youtrack_logs_vol:
