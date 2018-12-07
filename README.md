@@ -8,6 +8,6 @@ Simple docker compose setup for running the JetBrains Team Tools docker images.
 
 ## Run
 
-Run `acme.local` example
+Run `acme.land` example
 
-    docker-compose --project-name=acme.local up
+    docker-compose --project-name=acmeland up
